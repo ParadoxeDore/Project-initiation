@@ -28,6 +28,9 @@ Thumbs.db
 .vscode/
 .idea/
 
+# Claude Code local
+.claude/settings.local.json
+
 # React Native / Android
 mobile/android/.gradle/
 mobile/android/app/build/

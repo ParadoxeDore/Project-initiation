@@ -1,3 +1,50 @@
 {
-  "permissions": {}
+  "permissions": {
+    "deny": [
+      "Bash(rm -rf *)",
+      "Bash(rm -r *)",
+      "Bash(rm * /*)",
+      "Bash(rm * ~*)",
+      "Bash(del /f /s /q *)",
+      "Bash(rd /s /q *)",
+      "PowerShell(Remove-Item * -Recurse *)",
+      "PowerShell(Remove-Item * -Force *)",
+      "PowerShell(Format-Volume *)",
+      "PowerShell(Clear-Disk *)",
+      "PowerShell(Remove-Partition *)",
+
+      "Bash(git push --force *)",
+      "Bash(git push -f *)",
+      "Bash(git push * master)",
+      "Bash(git push * main)",
+      "Bash(git reset --hard *)",
+      "Bash(git clean -f *)",
+      "Bash(git clean -fd *)",
+      "Bash(git clean -fdx *)",
+      "Bash(git branch -D *)",
+
+      "Bash(* --no-verify *)",
+      "Bash(* -c commit.gpgsign=false *)",
+
+      "Bash(dd *)",
+      "Bash(mkfs *)",
+      "Bash(shutdown *)",
+      "Bash(reboot *)",
+      "Bash(format *)",
+      "Bash(cipher /w *)",
+      "Bash(diskpart *)",
+      "PowerShell(Stop-Computer *)",
+      "PowerShell(Restart-Computer *)",
+
+      "Bash(npm publish *)",
+      "Bash(yarn publish *)",
+      "Bash(npx publish *)",
+
+      "Bash(:(){ *)",
+      "Bash(* > /dev/sda *)",
+      "Bash(* > /dev/sdb *)",
+      "Bash(chmod -R 777 /*)",
+      "Bash(chown -R * /*)"
+    ]
+  }
 }
