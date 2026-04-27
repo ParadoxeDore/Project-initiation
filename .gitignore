@@ -1,0 +1,41 @@
+# Dépendances
+node_modules/
+.pnp
+.pnp.js
+
+# Build
+dist/
+build/
+.next/
+out/
+
+# Variables d'environnement
+.env
+.env.local
+.env.*.local
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# React Native / Android
+mobile/android/.gradle/
+mobile/android/app/build/
+mobile/android/local.properties
+*.keystore
+!debug.keystore
+
+# iOS
+mobile/ios/Pods/
+mobile/ios/build/
+*.xcworkspace
