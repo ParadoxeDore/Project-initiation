@@ -65,9 +65,15 @@ Project-initiation/
 │   ├── types/             # Types et interfaces TypeScript
 │   ├── constants/         # Constantes partagées
 │   └── __tests__/         # Tests des utilitaires partagés
+├── docs/            # Documentation technique
+│   ├── ARCHITECTURE.md    # Architecture détaillée
+│   ├── WORKFLOW.md        # Workflow Git et rôles
+│   ├── GAME_RULES.md      # Règles complètes du jeu
+│   └── CONFIGURATION.md   # Variables d'environnement
 └── .claude/
     ├── commands/    # Commandes slash : chef-projet, architecte, dev, reviewer, testeur
     ├── hooks/       # Scripts automatiques
+    ├── SECURITE.md  # Documentation des règles de sécurité
     └── settings.json
 ```
 
@@ -155,7 +161,7 @@ cd mobile && npm install && npx expo start
 cd backend && npm install && npm run dev
 ```
 
-Variables d'environnement requises : *(à documenter)*
+Variables d'environnement requises : voir [`docs/CONFIGURATION.md`](docs/CONFIGURATION.md)
 
 ---
 
