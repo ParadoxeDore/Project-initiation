@@ -253,13 +253,13 @@ Ce projet utilise 5 rôles activables via des commandes slash Claude Code.
 
 ### Permissions par rôle
 
-| Rôle | Lire code | Écrire code | Fichiers test | GitHub issues | Lancer tests | Créer PR |
-|------|:---------:|:-----------:|:-------------:|:-------------:|:------------:|:--------:|
-| `/chef-projet` | Oui | Non | Non | Créer / Fermer | Non | Non |
-| `/architecte`  | Oui | Specs uniquement | Non | Créer tâches | Non | Non |
-| `/dev`         | Oui | Oui | Non | Commenter | Non | Oui |
-| `/reviewer`    | Oui | Non | Non | Commenter | Non | Non |
-| `/testeur`     | Oui | Non | Oui | Créer bugs | Oui | Non |
+| Rôle | Lire code | Écrire code | Fichiers test | GitHub issues | Lancer tests | Créer PR | Sous-agents |
+|------|:---------:|:-----------:|:-------------:|:-------------:|:------------:|:--------:|:-----------:|
+| `/chef-projet` | Oui | Non | Non | Créer / Fermer | Non | Non | Non |
+| `/architecte`  | Oui | Specs uniquement | Non | Créer tâches | Non | Non | Oui |
+| `/dev`         | Oui | Oui | Non | Commenter | Non | Oui | Oui |
+| `/reviewer`    | Oui | Non | Non | Commenter | Non | Non | Oui |
+| `/testeur`     | Oui | Non | Oui | Créer bugs | Oui | Non | Non |
 
 ### Labels GitHub
 
@@ -276,12 +276,12 @@ Ce projet utilise 5 rôles activables via des commandes slash Claude Code.
 | `epic:base-de-mots` | Filtre Epic 5 |
 | `epic:multijoueur-local` | Filtre Epic 6 (V2) |
 
-### Commandes slash disponibles
+### Skills disponibles
 
-Les fichiers de commande sont dans `.claude/commands/` :
+Les skills sont définis dans `.claude/commands/` (nom imposé par Claude Code) et apparaissent dans le menu `/` :
 
 - `/chef-projet` — Active le rôle Chef de Projet
-- `/architecte` — Active le rôle Architecte
-- `/dev` — Active le rôle Développeur
-- `/reviewer` — Active le rôle Reviewer
+- `/architecte` — Active le rôle Architecte (avec sous-agents Explore + Plan)
+- `/dev` — Active le rôle Développeur (avec sous-agents Explore)
+- `/reviewer` — Active le rôle Reviewer (avec sous-agents + `/review` + `/security-review`)
 - `/testeur` — Active le rôle Testeur

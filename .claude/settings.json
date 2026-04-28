@@ -1,4 +1,17 @@
 {
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash c:/CLAUDE/Project-initiation/.claude/hooks/check-claude-md.sh"
+          }
+        ]
+      }
+    ]
+  },
   "permissions": {
     "deny": [
       "Bash(rm -rf *)",
@@ -40,7 +53,6 @@
       "Bash(yarn publish *)",
       "Bash(npx publish *)",
 
-      "Bash(:(){ *)",
       "Bash(* > /dev/sda *)",
       "Bash(* > /dev/sdb *)",
       "Bash(chmod -R 777 /*)",
