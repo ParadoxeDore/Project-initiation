@@ -2,13 +2,11 @@ import { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { RoleRevealScreenProps } from '../navigation/types';
 
-
 type Phase = 'waiting' | 'revealed' | 'masked-screen';
 
 export default function RoleRevealScreen({ navigation, route }: RoleRevealScreenProps) {
   const { gameState, playerIndex } = route.params;
   const [phase, setPhase] = useState<Phase>('waiting');
-  const [roleVisible, setRoleVisible] = useState(true);
 
   const player = gameState.players[playerIndex];
   const isLastPlayer = playerIndex === gameState.players.length - 1;
@@ -57,30 +55,15 @@ export default function RoleRevealScreen({ navigation, route }: RoleRevealScreen
         <Text style={styles.playerName}>{player.name}</Text>
 
         <View style={styles.roleCard}>
-          {roleVisible ? (
+          {player.word ? (
             <>
-              {player.word ? (
-                <>
-                  <Text style={styles.wordLabel}>Ton mot :</Text>
-                  <Text style={styles.word}>{player.word}</Text>
-                </>
-              ) : (
-                <Text style={styles.noWordHint}>Tu n'as pas de mot.{'\n'}Bluff et devine !</Text>
-              )}
+              <Text style={styles.wordLabel}>Ton mot :</Text>
+              <Text style={styles.word}>{player.word}</Text>
             </>
           ) : (
-            <Text style={styles.hiddenCardText}>●●●●●●</Text>
+            <Text style={styles.noWordHint}>Tu n'as pas de mot.{'\n'}Bluff et devine !</Text>
           )}
         </View>
-
-        <TouchableOpacity
-          style={styles.toggleButton}
-          onPress={() => setRoleVisible(!roleVisible)}
-        >
-          <Text style={styles.toggleButtonText}>
-            {roleVisible ? 'Cacher mon rôle' : 'Montrer mon rôle'}
-          </Text>
-        </TouchableOpacity>
       </View>
 
       <View style={styles.actions}>
@@ -120,12 +103,6 @@ const styles = StyleSheet.create({
   wordLabel: { fontSize: 13, color: '#8b7fc0', textTransform: 'uppercase', letterSpacing: 2, marginTop: 8 },
   word: { fontSize: 36, fontWeight: '800', color: '#e8e0ff', textAlign: 'center' },
   noWordHint: { fontSize: 16, color: '#8b7fc0', textAlign: 'center', lineHeight: 24, marginTop: 8 },
-  hiddenCardText: { fontSize: 28, color: '#2a2445', letterSpacing: 6 },
-  toggleButton: {
-    paddingHorizontal: 20, paddingVertical: 10, borderRadius: 20,
-    backgroundColor: '#1a1730', borderWidth: 1, borderColor: '#2a2445',
-  },
-  toggleButtonText: { color: '#8b7fc0', fontSize: 14, fontWeight: '600' },
   actions: { gap: 12 },
   maskScreenButton: {
     paddingVertical: 14, borderRadius: 16, alignItems: 'center',

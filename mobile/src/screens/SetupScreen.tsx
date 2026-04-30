@@ -28,6 +28,17 @@ export default function SetupScreen({ navigation, route }: SetupScreenProps) {
   const [balancedMode, setBalancedMode] = useState(false);
 
   const activePlayers = playerNames.filter((n) => n.trim().length > 0);
+  const balancedTotal = computeBalancedImpostorCount(activePlayers.length);
+
+  // In balanced mode, b is clamped to [0, n] and a = n - b
+  const effectiveMWCount = balancedMode ? Math.min(misterWhiteCount, balancedTotal) : misterWhiteCount;
+  const effectiveImpostorCount = balancedMode ? balancedTotal - effectiveMWCount : impostorCount;
+
+  // Disabled states
+  const aMinusDisabled = balancedMode ? effectiveImpostorCount === 0 : impostorCount === 0;
+  const aPlusDisabled  = balancedMode ? effectiveMWCount === 0       : impostorCount >= 4;
+  const bMinusDisabled = effectiveMWCount === 0;
+  const bPlusDisabled  = balancedMode ? effectiveImpostorCount === 0 : misterWhiteCount >= 3;
 
   function addPlayer() {
     if (playerNames.length < 10) setPlayerNames([...playerNames, '']);
@@ -45,10 +56,51 @@ export default function SetupScreen({ navigation, route }: SetupScreenProps) {
 
   function toggleTheme(theme: Theme) {
     if (themes.includes(theme)) {
-      if (themes.length === 1) return; // au moins un thème requis
+      if (themes.length === 1) return;
       setThemes(themes.filter((t) => t !== theme));
     } else {
       setThemes([...themes, theme]);
+    }
+  }
+
+  function toggleBalancedMode() {
+    const next = !balancedMode;
+    if (next) {
+      const bt = computeBalancedImpostorCount(activePlayers.length);
+      setMisterWhiteCount(Math.min(misterWhiteCount, bt));
+    }
+    setBalancedMode(next);
+  }
+
+  function onAMinus() {
+    if (balancedMode) {
+      setMisterWhiteCount(Math.min(balancedTotal, effectiveMWCount + 1));
+    } else {
+      setImpostorCount(Math.max(0, impostorCount - 1));
+    }
+  }
+
+  function onAPlus() {
+    if (balancedMode) {
+      setMisterWhiteCount(Math.max(0, effectiveMWCount - 1));
+    } else {
+      setImpostorCount(Math.min(4, impostorCount + 1));
+    }
+  }
+
+  function onBMinus() {
+    if (balancedMode) {
+      setMisterWhiteCount(Math.max(0, effectiveMWCount - 1));
+    } else {
+      setMisterWhiteCount(Math.max(0, misterWhiteCount - 1));
+    }
+  }
+
+  function onBPlus() {
+    if (balancedMode) {
+      setMisterWhiteCount(Math.min(balancedTotal, effectiveMWCount + 1));
+    } else {
+      setMisterWhiteCount(Math.min(3, misterWhiteCount + 1));
     }
   }
 
@@ -65,15 +117,15 @@ export default function SetupScreen({ navigation, route }: SetupScreenProps) {
       return;
     }
 
-    const resolvedImpostorCount = balancedMode
-      ? Math.max(0, computeBalancedImpostorCount(names.length) - misterWhiteCount)
-      : impostorCount;
+    const resolvedBT = computeBalancedImpostorCount(names.length);
+    const resolvedMW = balancedMode ? Math.min(misterWhiteCount, resolvedBT) : misterWhiteCount;
+    const resolvedImpostorCount = balancedMode ? resolvedBT - resolvedMW : impostorCount;
 
-    const minPlayers = resolvedImpostorCount + misterWhiteCount + 1;
+    const minPlayers = resolvedImpostorCount + resolvedMW + 1;
     if (names.length < minPlayers) {
       Alert.alert(
         'Configuration invalide',
-        `Avec ${resolvedImpostorCount} imposteur(s) et ${misterWhiteCount} Mister White, il faut au moins ${minPlayers} joueurs.`
+        `Avec ${resolvedImpostorCount} imposteur(s) et ${resolvedMW} Mister White, il faut au moins ${minPlayers} joueurs.`
       );
       return;
     }
@@ -82,16 +134,12 @@ export default function SetupScreen({ navigation, route }: SetupScreenProps) {
       playerNames: names,
       themes,
       impostorCount: resolvedImpostorCount,
-      misterWhiteCount,
+      misterWhiteCount: resolvedMW,
     };
 
     const gameState = createGame(config);
     navigation.navigate('PassPhone', { gameState, playerIndex: 0 });
   }
-
-  const effectiveImpostorCount = balancedMode
-    ? Math.max(0, computeBalancedImpostorCount(activePlayers.length) - misterWhiteCount)
-    : impostorCount;
 
   return (
     <ScrollView style={styles.scroll} contentContainerStyle={styles.container}>
@@ -151,15 +199,17 @@ export default function SetupScreen({ navigation, route }: SetupScreenProps) {
             <Text style={styles.counterLabel}>Imposteurs</Text>
             <View style={styles.counter}>
               <TouchableOpacity
-                style={styles.counterButton}
-                onPress={() => { setBalancedMode(false); setImpostorCount(Math.max(0, impostorCount - 1)); }}
+                style={[styles.counterButton, aMinusDisabled && styles.counterButtonDisabled]}
+                onPress={onAMinus}
+                disabled={aMinusDisabled}
               >
                 <Text style={styles.counterButtonText}>−</Text>
               </TouchableOpacity>
               <Text style={styles.counterValue}>{effectiveImpostorCount}</Text>
               <TouchableOpacity
-                style={styles.counterButton}
-                onPress={() => { setBalancedMode(false); setImpostorCount(Math.min(4, impostorCount + 1)); }}
+                style={[styles.counterButton, aPlusDisabled && styles.counterButtonDisabled]}
+                onPress={onAPlus}
+                disabled={aPlusDisabled}
               >
                 <Text style={styles.counterButtonText}>+</Text>
               </TouchableOpacity>
@@ -170,15 +220,17 @@ export default function SetupScreen({ navigation, route }: SetupScreenProps) {
             <Text style={styles.counterLabel}>Mister White</Text>
             <View style={styles.counter}>
               <TouchableOpacity
-                style={styles.counterButton}
-                onPress={() => setMisterWhiteCount(Math.max(0, misterWhiteCount - 1))}
+                style={[styles.counterButton, bMinusDisabled && styles.counterButtonDisabled]}
+                onPress={onBMinus}
+                disabled={bMinusDisabled}
               >
                 <Text style={styles.counterButtonText}>−</Text>
               </TouchableOpacity>
-              <Text style={styles.counterValue}>{misterWhiteCount}</Text>
+              <Text style={styles.counterValue}>{effectiveMWCount}</Text>
               <TouchableOpacity
-                style={styles.counterButton}
-                onPress={() => setMisterWhiteCount(Math.min(3, misterWhiteCount + 1))}
+                style={[styles.counterButton, bPlusDisabled && styles.counterButtonDisabled]}
+                onPress={onBPlus}
+                disabled={bPlusDisabled}
               >
                 <Text style={styles.counterButtonText}>+</Text>
               </TouchableOpacity>
@@ -187,7 +239,7 @@ export default function SetupScreen({ navigation, route }: SetupScreenProps) {
 
           <TouchableOpacity
             style={[styles.balancedButton, balancedMode && styles.balancedButtonActive]}
-            onPress={() => setBalancedMode(!balancedMode)}
+            onPress={toggleBalancedMode}
           >
             <Text style={[styles.balancedButtonText, balancedMode && styles.balancedButtonTextActive]}>
               {balancedMode ? '✓ Mode équilibré auto' : 'Mode équilibré auto'}
@@ -245,6 +297,7 @@ const styles = StyleSheet.create({
     width: 36, height: 36, borderRadius: 18,
     backgroundColor: '#2a2445', alignItems: 'center', justifyContent: 'center',
   },
+  counterButtonDisabled: { opacity: 0.3 },
   counterButtonText: { color: '#e8e0ff', fontSize: 20 },
   counterValue: { color: '#e8e0ff', fontSize: 24, fontWeight: '700', minWidth: 28, textAlign: 'center' },
   balancedButton: {
