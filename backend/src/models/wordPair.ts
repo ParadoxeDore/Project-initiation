@@ -5,7 +5,7 @@ import type {
   WordPairSelection,
   CreateWordPairPayload,
   UpdateWordPairPayload,
-} from '../../shared/types/words'
+} from '../../../shared/types/words'
 
 interface WordPairRow {
   id: string
