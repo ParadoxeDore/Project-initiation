@@ -66,7 +66,7 @@ export default function SetupScreen({ navigation, route }: SetupScreenProps) {
     }
 
     const resolvedImpostorCount = balancedMode
-      ? computeBalancedImpostorCount(names.length)
+      ? Math.max(0, computeBalancedImpostorCount(names.length) - misterWhiteCount)
       : impostorCount;
 
     const minPlayers = resolvedImpostorCount + misterWhiteCount + 1;
@@ -90,7 +90,7 @@ export default function SetupScreen({ navigation, route }: SetupScreenProps) {
   }
 
   const effectiveImpostorCount = balancedMode
-    ? computeBalancedImpostorCount(activePlayers.length)
+    ? Math.max(0, computeBalancedImpostorCount(activePlayers.length) - misterWhiteCount)
     : impostorCount;
 
   return (

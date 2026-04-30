@@ -2,17 +2,6 @@ import { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { RoleRevealScreenProps } from '../navigation/types';
 
-const ROLE_LABELS: Record<string, string> = {
-  civil: 'CIVIL',
-  imposteur: 'IMPOSTEUR',
-  'mister-white': 'MISTER WHITE',
-};
-
-const ROLE_COLORS: Record<string, string> = {
-  civil: '#4de6a0',
-  imposteur: '#e64d6c',
-  'mister-white': '#e6c44d',
-};
 
 type Phase = 'waiting' | 'revealed' | 'masked-screen';
 
@@ -67,12 +56,9 @@ export default function RoleRevealScreen({ navigation, route }: RoleRevealScreen
       <View style={styles.content}>
         <Text style={styles.playerName}>{player.name}</Text>
 
-        <View style={[styles.roleCard, { borderColor: ROLE_COLORS[player.role] }]}>
+        <View style={styles.roleCard}>
           {roleVisible ? (
             <>
-              <Text style={[styles.roleLabel, { color: ROLE_COLORS[player.role] }]}>
-                {ROLE_LABELS[player.role]}
-              </Text>
               {player.word ? (
                 <>
                   <Text style={styles.wordLabel}>Ton mot :</Text>
@@ -128,10 +114,9 @@ const styles = StyleSheet.create({
   revealCardText: { fontSize: 48 },
   roleCard: {
     width: '100%', backgroundColor: '#1a1730', borderRadius: 20,
-    borderWidth: 2, padding: 28, alignItems: 'center', gap: 12,
+    borderWidth: 2, borderColor: '#2a2445', padding: 28, alignItems: 'center', gap: 12,
     minHeight: 140, justifyContent: 'center',
   },
-  roleLabel: { fontSize: 28, fontWeight: '900', letterSpacing: 3 },
   wordLabel: { fontSize: 13, color: '#8b7fc0', textTransform: 'uppercase', letterSpacing: 2, marginTop: 8 },
   word: { fontSize: 36, fontWeight: '800', color: '#e8e0ff', textAlign: 'center' },
   noWordHint: { fontSize: 16, color: '#8b7fc0', textAlign: 'center', lineHeight: 24, marginTop: 8 },

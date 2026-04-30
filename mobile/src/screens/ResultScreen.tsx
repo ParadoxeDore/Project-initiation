@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { ResultScreenProps } from '../navigation/types';
 
 const OUTCOME_MESSAGES: Record<string, { title: string; subtitle: string; color: string }> = {
@@ -40,7 +40,18 @@ export default function ResultScreen({ navigation, route }: ResultScreenProps) {
   }
 
   function backToHome() {
-    navigation.reset({ index: 0, routes: [{ name: 'Home' }] });
+    Alert.alert(
+      'Retour à l\'accueil',
+      'La partie en cours sera perdue. Continuer ?',
+      [
+        { text: 'Annuler', style: 'cancel' },
+        {
+          text: 'Quitter',
+          style: 'destructive',
+          onPress: () => navigation.reset({ index: 0, routes: [{ name: 'Home' }] }),
+        },
+      ]
+    );
   }
 
   return (
