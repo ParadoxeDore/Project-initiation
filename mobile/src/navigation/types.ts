@@ -1,9 +1,9 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { GameState } from '../utils/gameEngine';
+import { GameConfig, GameState } from '../utils/gameEngine';
 
 export type RootStackParamList = {
   Home: undefined;
-  Setup: undefined;
+  Setup: { initialConfig?: GameConfig } | undefined;
   PassPhone: { gameState: GameState; playerIndex: number };
   RoleReveal: { gameState: GameState; playerIndex: number };
   Vote: { gameState: GameState };

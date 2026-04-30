@@ -12,9 +12,9 @@ export interface Player {
 
 export interface GameConfig {
   playerNames: string[];
-  theme: Theme;
+  themes: Theme[];
   impostorCount: number;
-  hasMisterWhite: boolean;
+  misterWhiteCount: number;
 }
 
 export interface GameState {
@@ -33,25 +33,24 @@ function shuffle<T>(array: T[]): T[] {
   return copy;
 }
 
-function pickRandomWordPair(theme: Theme): WordPair {
-  const pairs = WORD_PAIRS[theme];
-  return pairs[Math.floor(Math.random() * pairs.length)];
+function pickRandomWordPair(themes: Theme[]): WordPair {
+  const pool = themes.flatMap((t) => WORD_PAIRS[t]);
+  return pool[Math.floor(Math.random() * pool.length)];
 }
 
 export function computeBalancedImpostorCount(playerCount: number): number {
-  if (playerCount <= 4) return 1;
   if (playerCount <= 6) return 1;
   if (playerCount <= 8) return 2;
   return 2;
 }
 
 export function createGame(config: GameConfig): GameState {
-  const { playerNames, theme, impostorCount, hasMisterWhite } = config;
-  const wordPair = pickRandomWordPair(theme);
+  const { playerNames, themes, impostorCount, misterWhiteCount } = config;
+  const wordPair = pickRandomWordPair(themes);
 
   const roles: Role[] = [];
 
-  if (hasMisterWhite) {
+  for (let i = 0; i < misterWhiteCount; i++) {
     roles.push('mister-white');
   }
   for (let i = 0; i < impostorCount; i++) {
@@ -106,16 +105,14 @@ export type GameOutcome =
 export function checkGameOutcome(state: GameState): GameOutcome {
   const activePlayers = state.players.filter((p) => !p.isEliminated);
   const activeImpostors = activePlayers.filter((p) => p.role === 'imposteur');
-  const activeMisterWhite = activePlayers.find(
-    (p) => p.role === 'mister-white'
-  );
+  const activeMisterWhites = activePlayers.filter((p) => p.role === 'mister-white');
   const activeCivils = activePlayers.filter((p) => p.role === 'civil');
 
-  if (activeImpostors.length === 0 && !activeMisterWhite) {
+  if (activeImpostors.length === 0 && activeMisterWhites.length === 0) {
     return { winner: 'civils', reason: 'impostors_eliminated' };
   }
 
-  if (activeImpostors.length >= activeCivils.length) {
+  if (activeImpostors.length + activeMisterWhites.length >= activeCivils.length) {
     return { winner: 'imposteurs', reason: 'impostors_survived' };
   }
 

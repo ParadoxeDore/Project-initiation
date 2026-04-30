@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import {
-  Alert,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
@@ -11,7 +11,6 @@ import {
   checkGameOutcome,
   eliminatePlayer,
   GameState,
-  getLastEliminated,
   Player,
 } from '../utils/gameEngine';
 
@@ -70,29 +69,25 @@ export default function VoteScreen({ navigation, route }: VoteScreenProps) {
     return (
       <View style={styles.container}>
         <View style={styles.content}>
-          <Text style={styles.sectionTitle}>Mister White éliminé !</Text>
+          <Text style={styles.mwTitle}>Mister White éliminé !</Text>
           <Text style={styles.mwHint}>
-            {eliminated?.name}, tu as une chance de gagner.{'\n'}
-            Devine le mot des civils :
+            {eliminated?.name}, devine le mot des civils pour renverser la partie :
           </Text>
-          <TouchableOpacity
+          <TextInput
             style={styles.guessInput}
-            onPress={() => {
-              Alert.prompt(
-                'Ton mot',
-                'Entre le mot civil',
-                (text) => setMisterWhiteGuess(text ?? ''),
-                'plain-text',
-                misterWhiteGuess
-              );
-            }}
-          >
-            <Text style={[styles.guessInputText, !misterWhiteGuess && styles.placeholder]}>
-              {misterWhiteGuess || 'Appuie pour écrire…'}
-            </Text>
-          </TouchableOpacity>
+            placeholder="Ton mot…"
+            placeholderTextColor="#4a4060"
+            value={misterWhiteGuess}
+            onChangeText={setMisterWhiteGuess}
+            autoFocus
+            autoCapitalize="none"
+          />
         </View>
-        <TouchableOpacity style={styles.primaryButton} onPress={submitMisterWhiteGuess}>
+        <TouchableOpacity
+          style={[styles.primaryButton, !misterWhiteGuess.trim() && styles.primaryButtonDisabled]}
+          onPress={submitMisterWhiteGuess}
+          disabled={!misterWhiteGuess.trim()}
+        >
           <Text style={styles.primaryButtonText}>Valider ma réponse</Text>
         </TouchableOpacity>
       </View>
@@ -106,10 +101,7 @@ export default function VoteScreen({ navigation, route }: VoteScreenProps) {
           <Text style={styles.eliminatedEmoji}>💀</Text>
           <Text style={styles.eliminatedName}>{eliminated?.name}</Text>
           <Text style={styles.eliminatedRole}>
-            était {eliminated?.role === 'civil' ? 'un Civil' : 'un Imposteur'}
-          </Text>
-          <Text style={styles.eliminatedWord}>
-            Son mot : {eliminated?.word ?? '—'}
+            {eliminated?.role === 'civil' ? 'était un Civil' : 'était un Imposteur'}
           </Text>
         </View>
         <TouchableOpacity style={styles.primaryButton} onPress={continueAfterElimination}>
@@ -133,17 +125,10 @@ export default function VoteScreen({ navigation, route }: VoteScreenProps) {
               selectedPlayerId === player.id && styles.playerCardSelected,
             ]}
             onPress={() =>
-              setSelectedPlayerId(
-                selectedPlayerId === player.id ? null : player.id
-              )
+              setSelectedPlayerId(selectedPlayerId === player.id ? null : player.id)
             }
           >
-            <Text
-              style={[
-                styles.playerCardText,
-                selectedPlayerId === player.id && styles.playerCardTextSelected,
-              ]}
-            >
+            <Text style={[styles.playerCardText, selectedPlayerId === player.id && styles.playerCardTextSelected]}>
               {player.name}
             </Text>
             {selectedPlayerId === player.id && (
@@ -166,83 +151,37 @@ export default function VoteScreen({ navigation, route }: VoteScreenProps) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    backgroundColor: '#0d0d1a',
-    paddingHorizontal: 24,
-    paddingTop: 80,
-    paddingBottom: 60,
+    flex: 1, backgroundColor: '#0d0d1a',
+    paddingHorizontal: 24, paddingTop: 80, paddingBottom: 60,
   },
-  title: {
-    fontSize: 32,
-    fontWeight: '900',
-    color: '#e8e0ff',
-    marginBottom: 8,
-  },
-  subtitle: {
-    fontSize: 15,
-    color: '#8b7fc0',
-    marginBottom: 32,
-  },
-  content: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    gap: 16,
-  },
-  playerList: {
-    flex: 1,
-    gap: 10,
-  },
+  title: { fontSize: 32, fontWeight: '900', color: '#e8e0ff', marginBottom: 8 },
+  subtitle: { fontSize: 15, color: '#8b7fc0', marginBottom: 32 },
+  content: { flex: 1, justifyContent: 'center', alignItems: 'center', gap: 16 },
+  playerList: { flex: 1, gap: 10 },
   playerCard: {
-    backgroundColor: '#1a1730',
-    borderRadius: 14,
-    paddingVertical: 16,
-    paddingHorizontal: 20,
-    borderWidth: 1,
-    borderColor: '#2a2445',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    backgroundColor: '#1a1730', borderRadius: 14,
+    paddingVertical: 16, paddingHorizontal: 20,
+    borderWidth: 1, borderColor: '#2a2445',
+    flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center',
   },
-  playerCardSelected: {
-    borderColor: '#e64d6c',
-    backgroundColor: '#2a1020',
-  },
-  playerCardText: {
-    fontSize: 18,
-    color: '#e8e0ff',
-    fontWeight: '600',
-  },
-  playerCardTextSelected: {
-    color: '#e64d6c',
-  },
+  playerCardSelected: { borderColor: '#e64d6c', backgroundColor: '#2a1020' },
+  playerCardText: { fontSize: 18, color: '#e8e0ff', fontWeight: '600' },
+  playerCardTextSelected: { color: '#e64d6c' },
   checkmark: { color: '#e64d6c', fontSize: 18, fontWeight: '700' },
   primaryButton: {
-    backgroundColor: '#e64d6c',
-    paddingVertical: 18,
-    borderRadius: 16,
-    alignItems: 'center',
-    marginTop: 12,
+    backgroundColor: '#e64d6c', paddingVertical: 18,
+    borderRadius: 16, alignItems: 'center', marginTop: 12,
   },
-  primaryButtonDisabled: {
-    backgroundColor: '#2a2445',
-  },
+  primaryButtonDisabled: { backgroundColor: '#2a2445' },
   primaryButtonText: { color: '#fff', fontSize: 18, fontWeight: '700' },
   eliminatedEmoji: { fontSize: 64 },
   eliminatedName: { fontSize: 36, fontWeight: '900', color: '#e8e0ff' },
   eliminatedRole: { fontSize: 18, color: '#8b7fc0' },
-  eliminatedWord: { fontSize: 16, color: '#4a4060', marginTop: 8 },
-  sectionTitle: { fontSize: 28, fontWeight: '800', color: '#e8e0ff', textAlign: 'center' },
+  mwTitle: { fontSize: 28, fontWeight: '800', color: '#e8e0ff', textAlign: 'center' },
   mwHint: { fontSize: 16, color: '#8b7fc0', textAlign: 'center', lineHeight: 24 },
   guessInput: {
-    width: '100%',
-    backgroundColor: '#1a1730',
-    borderRadius: 14,
-    padding: 18,
-    borderWidth: 1,
-    borderColor: '#2a2445',
-    marginTop: 8,
+    width: '100%', backgroundColor: '#1a1730', borderRadius: 14,
+    padding: 18, borderWidth: 1, borderColor: '#2a2445',
+    fontSize: 20, color: '#e8e0ff', textAlign: 'center', marginTop: 8,
   },
-  guessInputText: { fontSize: 20, color: '#e8e0ff', textAlign: 'center' },
-  placeholder: { color: '#4a4060' },
 });
