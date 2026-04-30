@@ -38,16 +38,24 @@ Underword est structuré en trois couches indépendantes qui communiquent via un
 | `utils/` | Fonctions pures utilitaires |
 | `__tests__/` | Tests unitaires et d'intégration |
 
-### Écrans principaux (V1 — pass-and-play)
+### Écrans principaux (V1 — pass-and-play) ✅ Implémentés
 
 | Écran | Description |
 |-------|-------------|
 | `HomeScreen` | Accueil — créer une partie |
-| `SetupScreen` | Configuration (joueurs, thème, rôles) |
+| `SetupScreen` | Configuration : noms, multi-thèmes, nb imposteurs, nb Mister White, mode équilibré |
 | `PassPhoneScreen` | "Passe le téléphone à [nom]" |
-| `RoleRevealScreen` | Révélation secrète du rôle et du mot |
-| `GameScreen` | Liste des joueurs actifs + vote |
-| `ResultScreen` | Fin de partie — révélation des rôles |
+| `RoleRevealScreen` | Révélation secrète du rôle et du mot, toggle cacher/montrer |
+| `VoteScreen` | Liste des joueurs actifs, vote, élimination, devinette Mister White |
+| `ResultScreen` | Fin de partie — révélation des rôles, rejouer avec config conservée |
+
+### Logique de jeu (`utils/gameEngine.ts`) ✅ Implémentée
+
+Logique pure sans dépendance UI : création de partie, tirage des rôles, sélection de mots, élimination, détection des conditions de victoire.
+
+### Données de mots (`data/wordPairs.ts`) ✅ Proto
+
+32 paires codées en dur sur 4 thèmes. **À remplacer par des appels API** une fois le backend branché.
 
 ---
 
@@ -92,25 +100,28 @@ Underword est structuré en trois couches indépendantes qui communiquent via un
 Types TypeScript partagés entre mobile et backend. **Aucune logique métier ici.**
 
 ```typescript
-// shared/types/game.ts
+// mobile/src/utils/gameEngine.ts (source de vérité proto)
 export type Role = 'civil' | 'imposteur' | 'mister-white'
 
 export interface Player {
   id: string
   name: string
-  role?: Role
+  role: Role
+  word: string | null  // null pour Mister White
   isEliminated: boolean
 }
 
 export interface GameConfig {
   playerNames: string[]
-  theme: Theme
-  impostorCount: number | 'auto'
-  misterWhiteEnabled: boolean
+  themes: Theme[]          // multi-thèmes supportés
+  impostorCount: number
+  misterWhiteCount: number // indépendant de impostorCount
 }
 
 export type Theme = 'classique' | 'anime' | 'pop-culture' | 'musique'
 ```
+
+> Ces types doivent migrer dans `shared/types/game.ts` lors du branchement backend.
 
 ---
 

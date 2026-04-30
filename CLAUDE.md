@@ -46,13 +46,18 @@ Jeu mobile de déduction sociale inspiré d'Undercover. Les joueurs se passent u
 
 ```
 Project-initiation/
-├── mobile/          # Application React Native (Expo)
+├── mobile/          # Application React Native (Expo SDK 54)
+│   ├── App.tsx            # Point d'entrée + stack navigator
+│   ├── index.js           # Registre Expo
 │   └── src/
-│       ├── screens/       # Écrans (Accueil, Configuration, Rôle secret, Résultats…)
+│       ├── screens/       # HomeScreen, SetupScreen, PassPhoneScreen,
+│       │                  # RoleRevealScreen, VoteScreen, ResultScreen
+│       ├── navigation/    # Types de navigation (RootStackParamList)
+│       ├── data/          # wordPairs.ts — paires de mots codées en dur (proto)
+│       ├── utils/         # gameEngine.ts — logique de jeu pure
 │       ├── components/    # Composants réutilisables
-│       ├── services/      # Appels API / Socket
+│       ├── services/      # Appels API / Socket (à brancher post-proto)
 │       ├── hooks/         # Hooks React personnalisés
-│       ├── utils/         # Fonctions utilitaires
 │       └── __tests__/     # Tests unitaires
 ├── backend/         # API REST + WebSocket (Node.js / Express)
 │   └── src/
@@ -93,10 +98,10 @@ Project-initiation/
 
 ## Configuration d'une partie
 
-- Nombre d'imposteurs : **manuel** (1, 2…) ou **mode équilibré automatique**.
-- Activation de **Mister White** : oui / non.
-- Choix du **thème** (mode de jeu).
-- Possibilité de **mélanger les thèmes** *(à préciser)*.
+- Nombre d'imposteurs : **manuel** (0, 1, 2…) ou **mode équilibré automatique**.
+- Nombre de **Mister White** : **manuel** (0, 1, 2…), indépendant du nombre d'imposteurs.
+- Choix du **thème** : sélection **multiple** possible (les mots sont piochés dans le pool combiné).
+- Possibilité de **cacher / montrer** son rôle à la demande après révélation.
 
 ---
 
@@ -151,27 +156,42 @@ Project-initiation/
 
 ---
 
-## Démarrage *(à compléter une fois la stack initialisée)*
+## Démarrage
 
 ```bash
-# Mobile
+# Mobile (proto jouable sans backend)
 cd mobile && npm install && npx expo start
+# → Scanner le QR code avec Expo Go (SDK 54) sur le téléphone
 
-# Backend
+# Backend (pas requis pour le proto)
 cd backend && npm install && npm run dev
 ```
 
-Variables d'environnement requises : voir [`docs/CONFIGURATION.md`](docs/CONFIGURATION.md)
+Variables d'environnement requises (backend uniquement) : voir [`docs/CONFIGURATION.md`](docs/CONFIGURATION.md)
 
 ---
 
+## État d'avancement
+
+| Élément | Statut | Notes |
+|---------|--------|-------|
+| Proto mobile pass-and-play | ✅ Fonctionnel | PR #43 — jouable sur Expo Go SDK 54 |
+| Backend — migration PostgreSQL | ✅ Prêt | PR #40 — en attente de review |
+| Backend — types partagés | ✅ Prêt | PR #39 — en attente de review |
+| Backend — modèle wordPair | ✅ Prêt | PR #41 — en attente de review |
+| Backend — middleware Zod + auth | ✅ Prêt | PR #42 — en attente de review |
+| Backend — service wordService | 🔲 À faire | TASK-04 |
+| Backend — seed initial 4 thèmes | 🔲 À faire | TASK-09 |
+| Routes REST | 🔲 À faire | TASK-06, TASK-07 |
+| Connexion mobile ↔ backend | 🔲 À faire | après validation du proto |
+
 ## Priorités de développement
 
-1. Epic 5 — Base de données de mots (fondation du jeu)
-2. Epic 1 — Création et configuration d'une partie
-3. Epic 2 — Attribution secrète des rôles
-4. Epic 3 — Phase de discussion et vote
-5. Epic 4 — Fin de partie et résultats
+1. ~~Epic 5 — Base de données de mots~~ *(proto mobile en cours de validation)*
+2. Valider le game design avec le proto mobile (PR #43)
+3. Reprendre le workflow backend : merger PR #39–#42, puis TASK-04 + TASK-09
+4. Brancher le mobile sur le backend (remplacer `wordPairs.ts` par appels API)
+5. Epic 1–4 — Compléter les écrans manquants si nécessaire
 6. Epic 6 — Multijoueur local *(plus tard)*
 
 ---
