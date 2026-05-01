@@ -1,18 +1,34 @@
 {
-  "hooks": {
-    "PreToolUse": [
-      {
-        "matcher": "Bash",
-        "hooks": [
-          {
-            "type": "command",
-            "command": "bash c:/CLAUDE/Project-initiation/.claude/hooks/check-claude-md.sh"
-          }
-        ]
-      }
-    ]
-  },
   "permissions": {
+    "allow": [
+      "Bash(gh issue *)",
+      "Bash(gh pr *)",
+      "Bash(gh issue list *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git checkout *)",
+      "Bash(git status)",
+      "Bash(git diff *)",
+      "Bash(git log *)",
+      "Bash(git push origin *)",
+      "Bash(npx --yes typescript tsc --noEmit -p tsconfig.json)",
+      "Bash(npm --version)",
+      "PowerShell(node --version)",
+      "PowerShell(npm --version)",
+      "Bash(git -C /c/CLAUDE/Project-initiation branch -a)",
+      "Skill(dev)",
+      "Skill(dev:*)",
+      "Bash(npm install *)",
+      "Bash(npx tsc *)",
+      "Bash(npx expo *)",
+      "Bash(echo \"PID: $!\")",
+      "Bash(netstat -ano)",
+      "Bash(taskkill /PID 18628 /F)",
+      "Read(//c/CLAUDE/**)",
+      "Bash(git cherry-pick *)",
+      "Bash(npm test *)",
+      "Bash(npm run *)"
+    ],
     "deny": [
       "Bash(rm -rf *)",
       "Bash(rm -r *)",
@@ -25,7 +41,6 @@
       "PowerShell(Format-Volume *)",
       "PowerShell(Clear-Disk *)",
       "PowerShell(Remove-Partition *)",
-
       "Bash(git push --force *)",
       "Bash(git push -f *)",
       "Bash(git push * master)",
@@ -35,10 +50,8 @@
       "Bash(git clean -fd *)",
       "Bash(git clean -fdx *)",
       "Bash(git branch -D *)",
-
       "Bash(* --no-verify *)",
       "Bash(* -c commit.gpgsign=false *)",
-
       "Bash(dd *)",
       "Bash(mkfs *)",
       "Bash(shutdown *)",
@@ -48,11 +61,9 @@
       "Bash(diskpart *)",
       "PowerShell(Stop-Computer *)",
       "PowerShell(Restart-Computer *)",
-
       "Bash(npm publish *)",
       "Bash(yarn publish *)",
       "Bash(npx publish *)",
-
       "Bash(* > /dev/sda *)",
       "Bash(* > /dev/sdb *)",
       "Bash(chmod -R 777 /*)",
