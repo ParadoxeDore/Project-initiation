@@ -1,8 +1,8 @@
 import { z } from 'zod'
-import { THEMES } from '../../../shared/constants/themes'
-import type { CreateWordPairPayload, UpdateWordPairPayload } from '../../../shared/types/words'
+import { THEMES } from '../../../../shared/constants/themes'
+import type { CreateWordPairPayload, UpdateWordPairPayload, Theme } from '../../../../shared/types/words'
 
-const themeEnum = z.enum(THEMES as [string, ...string[]])
+const themeEnum = z.enum(THEMES as unknown as [Theme, ...Theme[]])
 
 export const themeQuerySchema = z.object({
   theme: themeEnum,
