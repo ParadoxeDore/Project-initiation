@@ -2,22 +2,27 @@ import { Router } from 'express'
 import type { Request, Response, NextFunction } from 'express'
 import { adminAuth } from '../../middleware/adminAuth'
 import { validateBody } from '../../middleware/validate'
-import { createWordPairSchema, updateWordPairSchema } from '../../middleware/schemas/wordSchemas'
+import { createWordPairSchema, updateWordPairSchema, listWordPairsQuerySchema } from '../../middleware/schemas/wordSchemas'
 import * as wordService from '../../services/wordService'
 import type { PairFilters } from '../../models/wordPair'
-import type { Theme } from '../../../../shared/types/words'
 
 const router = Router()
 
 router.use(adminAuth)
 
 router.get('/', async (req: Request, res: Response, next: NextFunction): Promise<void> => {
+  const queryParsed = listWordPairsQuerySchema.safeParse(req.query)
+  if (!queryParsed.success) {
+    res.status(400).json({ error: 'Validation échouée', details: queryParsed.error.issues })
+    return
+  }
   try {
+    const { theme, activeOnly, page, pageSize } = queryParsed.data
     const filters: PairFilters = {}
-    if (req.query['theme']) filters.theme = req.query['theme'] as Theme
-    if (req.query['activeOnly'] === 'true') filters.activeOnly = true
-    if (req.query['page']) filters.page = parseInt(req.query['page'] as string, 10)
-    if (req.query['pageSize']) filters.pageSize = parseInt(req.query['pageSize'] as string, 10)
+    if (theme !== undefined) filters.theme = theme
+    if (activeOnly !== undefined) filters.activeOnly = activeOnly === 'true'
+    if (page !== undefined) filters.page = page
+    if (pageSize !== undefined) filters.pageSize = pageSize
     const result = await wordService.listWordPairs(filters)
     res.json(result)
   } catch (err) {

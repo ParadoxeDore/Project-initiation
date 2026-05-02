@@ -8,6 +8,13 @@ export const themeQuerySchema = z.object({
   theme: themeEnum,
 }).strict()
 
+export const listWordPairsQuerySchema = z.object({
+  theme: themeEnum.optional(),
+  activeOnly: z.enum(['true', 'false']).optional(),
+  page: z.coerce.number().int().positive().optional(),
+  pageSize: z.coerce.number().int().positive().max(100).optional(),
+})
+
 export const createWordPairSchema = z.object({
   theme: themeEnum,
   civilWord: z.string().min(1, 'Le mot civil ne peut pas être vide'),
