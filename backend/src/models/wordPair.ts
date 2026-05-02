@@ -101,7 +101,9 @@ export async function createPair(payload: CreateWordPairPayload): Promise<WordPa
      RETURNING *`,
     [payload.theme, payload.civilWord, payload.impostorWord]
   )
-  return mapRow(rows[0])
+  const row = rows[0]
+  if (!row) throw new Error('INSERT word_pairs did not return a row')
+  return mapRow(row)
 }
 
 export async function updatePair(
