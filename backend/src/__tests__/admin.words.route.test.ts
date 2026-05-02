@@ -49,6 +49,30 @@ describe('GET /api/admin/words', () => {
     expect(res.status).toBe(200)
     expect(res.body).toEqual(mockList)
   })
+
+  it('retourne 400 si le thème est invalide', async () => {
+    const res = await request(app)
+      .get('/api/admin/words?theme=inconnu')
+      .set(authHeaders)
+    expect(res.status).toBe(400)
+    expect(mockedService.listWordPairs).not.toHaveBeenCalled()
+  })
+
+  it('retourne 400 si page est non numérique', async () => {
+    const res = await request(app)
+      .get('/api/admin/words?page=abc')
+      .set(authHeaders)
+    expect(res.status).toBe(400)
+    expect(mockedService.listWordPairs).not.toHaveBeenCalled()
+  })
+
+  it('retourne 400 si page est négative', async () => {
+    const res = await request(app)
+      .get('/api/admin/words?page=-1')
+      .set(authHeaders)
+    expect(res.status).toBe(400)
+    expect(mockedService.listWordPairs).not.toHaveBeenCalled()
+  })
 })
 
 describe('POST /api/admin/words', () => {
