@@ -1,4 +1,5 @@
 import { Alert, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { ResultScreenProps } from '../navigation/types';
 
 const OUTCOME_MESSAGES: Record<string, { title: string; subtitle: string; color: string }> = {
@@ -55,6 +56,7 @@ export default function ResultScreen({ navigation, route }: ResultScreenProps) {
   }
 
   return (
+    <SafeAreaView style={styles.safeArea}>
     <ScrollView style={styles.scroll} contentContainerStyle={styles.container}>
       <View style={styles.outcomeSection}>
         <Text style={[styles.outcomeTitle, { color: message.color }]}>{message.title}</Text>
@@ -100,12 +102,14 @@ export default function ResultScreen({ navigation, route }: ResultScreenProps) {
         </TouchableOpacity>
       </View>
     </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  scroll: { flex: 1, backgroundColor: '#0d0d1a' },
-  container: { padding: 24, paddingTop: 80, paddingBottom: 60, gap: 32 },
+  safeArea: { flex: 1, backgroundColor: '#0d0d1a' },
+  scroll: { flex: 1 },
+  container: { padding: 24, paddingBottom: 60, gap: 32 },
   outcomeSection: { alignItems: 'center', gap: 10 },
   outcomeTitle: { fontSize: 32, fontWeight: '900', textAlign: 'center' },
   outcomeSubtitle: { fontSize: 16, color: '#8b7fc0', textAlign: 'center' },
