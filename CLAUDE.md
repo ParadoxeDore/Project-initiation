@@ -56,11 +56,19 @@ Project-initiation/
 │       └── __tests__/     # Tests unitaires
 ├── backend/         # API REST + WebSocket (Node.js / Express)
 │   └── src/
-│       ├── routes/        # Endpoints REST
-│       ├── services/      # Logique métier (tirage des rôles, des mots…)
-│       ├── middleware/     # Auth, validation
-│       ├── socket/        # Gestion des événements WebSocket
-│       └── __tests__/     # Tests unitaires
+│       ├── app.ts         # Point d'entrée Express (montage routes + handler erreurs)
+│       ├── db/
+│       │   ├── connection.ts
+│       │   ├── migrate.ts
+│       │   ├── migrations/ # Fichiers SQL idempotents
+│       │   └── seeds/      # Données initiales (4 thèmes, ~98 paires)
+│       ├── models/        # Couche d'accès SQL (DAO)
+│       ├── routes/        # Endpoints REST (/api/words, /api/admin/words)
+│       ├── services/      # Logique métier
+│       ├── middleware/    # Auth admin (Bearer token), validation Zod
+│       ├── utils/         # Erreurs personnalisées
+│       ├── socket/        # Gestion des événements WebSocket (à venir)
+│       └── __tests__/     # Tests unitaires et supertest
 ├── shared/          # Types TypeScript et constantes partagés
 │   ├── types/             # Types et interfaces TypeScript
 │   ├── constants/         # Constantes partagées
@@ -72,10 +80,12 @@ Project-initiation/
 │   └── CONFIGURATION.md   # Variables d'environnement
 └── .claude/
     ├── commands/    # Commandes slash : chef-projet, architecte, dev, reviewer, testeur
-    ├── hooks/       # Scripts automatiques
+    ├── specs/       # Specs techniques générées par l'Architecte
     ├── SECURITE.md  # Documentation des règles de sécurité
     └── settings.json
 ```
+
+> **Note monorepo TypeScript :** `backend/tsconfig.json` utilise `rootDir: ".."` pour couvrir à la fois `backend/src/` et `shared/`. Les imports relatifs depuis `backend/src/` vers `shared/` remontent d'autant de niveaux que nécessaire (ex : `../../../shared/` depuis `backend/src/<dossier>/`).
 
 ---
 
@@ -151,23 +161,32 @@ Project-initiation/
 
 ---
 
-## Démarrage *(à compléter une fois la stack initialisée)*
+## Démarrage
 
 ```bash
+# Backend
+cd backend && npm install
+npm run db:migrate   # Applique les migrations PostgreSQL
+npm run db:seed      # Insère les données initiales (idempotent)
+npm run dev          # Lance le serveur sur le port 3000
+
 # Mobile
 cd mobile && npm install && npx expo start
-
-# Backend
-cd backend && npm install && npm run dev
 ```
 
 Variables d'environnement requises : voir [`docs/CONFIGURATION.md`](docs/CONFIGURATION.md)
+
+| Variable | Description |
+|----------|-------------|
+| `DATABASE_URL` | URL PostgreSQL complète (ou variables individuelles `DB_HOST`, `DB_PORT`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`) |
+| `ADMIN_TOKEN` | Token Bearer pour les routes `/api/admin/words` |
+| `PORT` | Port du serveur Express (défaut : 3000) |
 
 ---
 
 ## Priorités de développement
 
-1. Epic 5 — Base de données de mots (fondation du jeu)
+1. ~~Epic 5 — Base de données de mots~~ ✅ **En cours de review (PR #44, #45)**
 2. Epic 1 — Création et configuration d'une partie
 3. Epic 2 — Attribution secrète des rôles
 4. Epic 3 — Phase de discussion et vote

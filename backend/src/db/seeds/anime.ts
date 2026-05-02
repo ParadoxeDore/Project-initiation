@@ -1,0 +1,26 @@
+import type { CreateWordPairPayload } from '../../../../shared/types/words'
+
+export const animePairs: CreateWordPairPayload[] = [
+  { theme: 'anime', civilWord: 'Naruto', impostorWord: 'Boruto' },
+  { theme: 'anime', civilWord: 'Goku', impostorWord: 'Vegeta' },
+  { theme: 'anime', civilWord: 'Luffy', impostorWord: 'Zoro' },
+  { theme: 'anime', civilWord: 'Sasuke', impostorWord: 'Itachi' },
+  { theme: 'anime', civilWord: 'Edward Elric', impostorWord: 'Alphonse Elric' },
+  { theme: 'anime', civilWord: 'Ichigo', impostorWord: 'Rukia' },
+  { theme: 'anime', civilWord: 'Light Yagami', impostorWord: 'L' },
+  { theme: 'anime', civilWord: 'Mikasa', impostorWord: 'Eren' },
+  { theme: 'anime', civilWord: 'Kirito', impostorWord: 'Asuna' },
+  { theme: 'anime', civilWord: 'Midoriya', impostorWord: 'Bakugo' },
+  { theme: 'anime', civilWord: 'Gon', impostorWord: 'Killua' },
+  { theme: 'anime', civilWord: 'Saitama', impostorWord: 'Genos' },
+  { theme: 'anime', civilWord: 'Lelouch', impostorWord: 'Suzaku' },
+  { theme: 'anime', civilWord: 'Shinji', impostorWord: 'Rei' },
+  { theme: 'anime', civilWord: 'Conan', impostorWord: 'Shinichi' },
+  { theme: 'anime', civilWord: 'Tanjiro', impostorWord: 'Inosuke' },
+  { theme: 'anime', civilWord: 'Yuji Itadori', impostorWord: 'Megumi Fushiguro' },
+  { theme: 'anime', civilWord: 'Natsu', impostorWord: 'Gray' },
+  { theme: 'anime', civilWord: 'Senku', impostorWord: 'Taiju' },
+  { theme: 'anime', civilWord: 'Rimuru', impostorWord: 'Shion' },
+  { theme: 'anime', civilWord: 'Gintoki', impostorWord: 'Hijikata' },
+  { theme: 'anime', civilWord: 'Spike Spiegel', impostorWord: 'Jet Black' },
+]

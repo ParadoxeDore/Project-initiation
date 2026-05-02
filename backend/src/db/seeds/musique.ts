@@ -1,0 +1,26 @@
+import type { CreateWordPairPayload } from '../../../../shared/types/words'
+
+export const musiquePairs: CreateWordPairPayload[] = [
+  { theme: 'musique', civilWord: 'guitare', impostorWord: 'basse' },
+  { theme: 'musique', civilWord: 'piano', impostorWord: 'orgue' },
+  { theme: 'musique', civilWord: 'rap', impostorWord: 'hip-hop' },
+  { theme: 'musique', civilWord: 'jazz', impostorWord: 'blues' },
+  { theme: 'musique', civilWord: 'violon', impostorWord: 'alto' },
+  { theme: 'musique', civilWord: 'Beyoncé', impostorWord: 'Rihanna' },
+  { theme: 'musique', civilWord: 'Beatles', impostorWord: 'Rolling Stones' },
+  { theme: 'musique', civilWord: 'Michael Jackson', impostorWord: 'Prince' },
+  { theme: 'musique', civilWord: 'Eminem', impostorWord: 'Kanye West' },
+  { theme: 'musique', civilWord: 'Daft Punk', impostorWord: 'Chemical Brothers' },
+  { theme: 'musique', civilWord: 'rock', impostorWord: 'métal' },
+  { theme: 'musique', civilWord: 'trompette', impostorWord: 'trombone' },
+  { theme: 'musique', civilWord: 'flûte', impostorWord: 'hautbois' },
+  { theme: 'musique', civilWord: 'reggae', impostorWord: 'ska' },
+  { theme: 'musique', civilWord: 'Taylor Swift', impostorWord: 'Ariana Grande' },
+  { theme: 'musique', civilWord: 'Elvis', impostorWord: 'Johnny Hallyday' },
+  { theme: 'musique', civilWord: 'Beethoven', impostorWord: 'Mozart' },
+  { theme: 'musique', civilWord: 'saxophone', impostorWord: 'clarinette' },
+  { theme: 'musique', civilWord: 'country', impostorWord: 'folk' },
+  { theme: 'musique', civilWord: 'batterie', impostorWord: 'percussions' },
+  { theme: 'musique', civilWord: 'pop', impostorWord: 'électro' },
+  { theme: 'musique', civilWord: 'David Bowie', impostorWord: 'Freddie Mercury' },
+]

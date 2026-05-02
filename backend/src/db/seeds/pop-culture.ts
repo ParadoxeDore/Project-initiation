@@ -1,0 +1,26 @@
+import type { CreateWordPairPayload } from '../../../../shared/types/words'
+
+export const popCulturePairs: CreateWordPairPayload[] = [
+  { theme: 'pop-culture', civilWord: 'Harry Potter', impostorWord: 'Hermione Granger' },
+  { theme: 'pop-culture', civilWord: 'Batman', impostorWord: 'Superman' },
+  { theme: 'pop-culture', civilWord: 'Iron Man', impostorWord: 'Captain America' },
+  { theme: 'pop-culture', civilWord: 'Luke Skywalker', impostorWord: 'Han Solo' },
+  { theme: 'pop-culture', civilWord: 'Jack Sparrow', impostorWord: 'Will Turner' },
+  { theme: 'pop-culture', civilWord: 'Sherlock Holmes', impostorWord: 'John Watson' },
+  { theme: 'pop-culture', civilWord: 'James Bond', impostorWord: 'Jason Bourne' },
+  { theme: 'pop-culture', civilWord: 'Frodon', impostorWord: 'Gandalf' },
+  { theme: 'pop-culture', civilWord: 'Joker', impostorWord: 'Harley Quinn' },
+  { theme: 'pop-culture', civilWord: 'Dracula', impostorWord: 'Frankenstein' },
+  { theme: 'pop-culture', civilWord: 'Katniss', impostorWord: 'Peeta' },
+  { theme: 'pop-culture', civilWord: 'Walter White', impostorWord: 'Jesse Pinkman' },
+  { theme: 'pop-culture', civilWord: 'Jon Snow', impostorWord: 'Daenerys' },
+  { theme: 'pop-culture', civilWord: 'Michael Scott', impostorWord: 'Dwight Schrute' },
+  { theme: 'pop-culture', civilWord: 'Ross', impostorWord: 'Chandler' },
+  { theme: 'pop-culture', civilWord: 'Sheldon Cooper', impostorWord: 'Leonard Hofstadter' },
+  { theme: 'pop-culture', civilWord: 'Mulder', impostorWord: 'Scully' },
+  { theme: 'pop-culture', civilWord: 'Indiana Jones', impostorWord: 'Lara Croft' },
+  { theme: 'pop-culture', civilWord: 'Neo', impostorWord: 'Morpheus' },
+  { theme: 'pop-culture', civilWord: 'Tyler Durden', impostorWord: 'Marla Singer' },
+  { theme: 'pop-culture', civilWord: 'Tony Soprano', impostorWord: 'Don Corleone' },
+  { theme: 'pop-culture', civilWord: 'Ted Mosby', impostorWord: 'Barney Stinson' },
+]

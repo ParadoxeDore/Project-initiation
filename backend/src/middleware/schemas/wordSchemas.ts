@@ -1,12 +1,19 @@
 import { z } from 'zod'
-import { THEMES } from '../../../shared/constants/themes'
-import type { CreateWordPairPayload, UpdateWordPairPayload } from '../../../shared/types/words'
+import { THEMES } from '../../../../shared/constants/themes'
+import type { CreateWordPairPayload, UpdateWordPairPayload, Theme } from '../../../../shared/types/words'
 
-const themeEnum = z.enum(THEMES as [string, ...string[]])
+const themeEnum = z.enum(THEMES as unknown as [Theme, ...Theme[]])
 
 export const themeQuerySchema = z.object({
   theme: themeEnum,
 }).strict()
+
+export const listWordPairsQuerySchema = z.object({
+  theme: themeEnum.optional(),
+  activeOnly: z.enum(['true', 'false']).optional(),
+  page: z.coerce.number().int().positive().optional(),
+  pageSize: z.coerce.number().int().positive().max(100).optional(),
+})
 
 export const createWordPairSchema = z.object({
   theme: themeEnum,
