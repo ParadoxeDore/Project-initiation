@@ -1,3 +1,4 @@
+import { timingSafeEqual } from 'crypto'
 import type { Request, Response, NextFunction, RequestHandler } from 'express'
 
 export const adminAuth: RequestHandler = (req: Request, res: Response, next: NextFunction): void => {
@@ -15,7 +16,15 @@ export const adminAuth: RequestHandler = (req: Request, res: Response, next: Nex
     return
   }
 
-  if (token !== process.env['ADMIN_TOKEN']) {
+  const adminToken = process.env['ADMIN_TOKEN'] ?? ''
+  const tokenBuffer = Buffer.from(token)
+  const adminBuffer = Buffer.from(adminToken)
+
+  if (
+    adminToken === '' ||
+    tokenBuffer.length !== adminBuffer.length ||
+    !timingSafeEqual(tokenBuffer, adminBuffer)
+  ) {
     res.status(403).json({ error: 'Token invalide' })
     return
   }

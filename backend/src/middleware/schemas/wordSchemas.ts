@@ -1,6 +1,6 @@
 import { z } from 'zod'
-import { THEMES } from '../../../shared/constants/themes'
-import type { CreateWordPairPayload, UpdateWordPairPayload } from '../../../shared/types/words'
+import { THEMES } from '../../../../shared/constants/themes'
+import type { CreateWordPairPayload, UpdateWordPairPayload } from '../../../../shared/types/words'
 
 const themeEnum = z.enum(THEMES as [string, ...string[]])
 
@@ -11,13 +11,13 @@ export const themeQuerySchema = z.object({
 export const createWordPairSchema = z.object({
   theme: themeEnum,
   civilWord: z.string().min(1, 'Le mot civil ne peut pas être vide'),
-  impostorWord: z.string().min(1, "Le mot imposteur ne peut pas être vide"),
+  impostorWord: z.string().min(1, 'Le mot imposteur ne peut pas être vide'),
 }).strict()
 
 export const updateWordPairSchema = z.object({
   theme: themeEnum.optional(),
   civilWord: z.string().min(1, 'Le mot civil ne peut pas être vide').optional(),
-  impostorWord: z.string().min(1, "Le mot imposteur ne peut pas être vide").optional(),
+  impostorWord: z.string().min(1, 'Le mot imposteur ne peut pas être vide').optional(),
   isActive: z.boolean().optional(),
 }).strict().refine(
   (data) => Object.keys(data).length > 0,
