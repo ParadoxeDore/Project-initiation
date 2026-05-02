@@ -96,10 +96,10 @@ export function eliminatePlayer(state: GameState, playerId: string): GameState {
   };
 }
 
+export type OutcomeWinner = 'civils' | 'imposteurs' | 'mister-white';
+
 export type GameOutcome =
-  | { winner: 'civils'; reason: 'impostors_eliminated' }
-  | { winner: 'imposteurs'; reason: 'impostors_survived' }
-  | { winner: 'mister-white'; reason: 'guessed_civil_word' }
+  | { winner: OutcomeWinner; reason: string }
   | null;
 
 export function checkGameOutcome(state: GameState): GameOutcome {

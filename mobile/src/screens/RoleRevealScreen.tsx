@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { RoleRevealScreenProps } from '../navigation/types';
 
 type Phase = 'waiting' | 'revealed' | 'masked-screen';
@@ -21,7 +22,7 @@ export default function RoleRevealScreen({ navigation, route }: RoleRevealScreen
 
   if (phase === 'masked-screen') {
     return (
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <View style={styles.maskedContent}>
           <Text style={styles.maskedTitle}>Écran masqué</Text>
           <Text style={styles.maskedSubtitle}>Passe le téléphone au suivant</Text>
@@ -31,13 +32,13 @@ export default function RoleRevealScreen({ navigation, route }: RoleRevealScreen
             {isLastPlayer ? 'Commencer la partie →' : 'Joueur suivant →'}
           </Text>
         </TouchableOpacity>
-      </View>
+      </SafeAreaView>
     );
   }
 
   if (phase === 'waiting') {
     return (
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <View style={styles.content}>
           <Text style={styles.playerName}>{player.name}</Text>
           <Text style={styles.tapHint}>Appuie pour révéler ton rôle</Text>
@@ -45,12 +46,12 @@ export default function RoleRevealScreen({ navigation, route }: RoleRevealScreen
             <Text style={styles.revealCardText}>👁</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </SafeAreaView>
     );
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.content}>
         <Text style={styles.playerName}>{player.name}</Text>
 
@@ -76,14 +77,14 @@ export default function RoleRevealScreen({ navigation, route }: RoleRevealScreen
           </Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1, backgroundColor: '#0d0d1a',
-    paddingHorizontal: 24, paddingTop: 80, paddingBottom: 60,
+    paddingHorizontal: 24, paddingBottom: 60,
     justifyContent: 'space-between',
   },
   content: { flex: 1, justifyContent: 'center', alignItems: 'center', gap: 20 },

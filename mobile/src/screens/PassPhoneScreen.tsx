@@ -1,4 +1,5 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { PassPhoneScreenProps } from '../navigation/types';
 
 export default function PassPhoneScreen({ navigation, route }: PassPhoneScreenProps) {
@@ -10,7 +11,7 @@ export default function PassPhoneScreen({ navigation, route }: PassPhoneScreenPr
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.content}>
         <Text style={styles.instruction}>Passe le téléphone à</Text>
         <Text style={styles.playerName}>{player.name}</Text>
@@ -22,7 +23,7 @@ export default function PassPhoneScreen({ navigation, route }: PassPhoneScreenPr
       <TouchableOpacity style={styles.button} onPress={onReady}>
         <Text style={styles.buttonText}>Je suis prêt(e) →</Text>
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -32,7 +33,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#0d0d1a',
     paddingHorizontal: 32,
     paddingBottom: 60,
-    paddingTop: 100,
     justifyContent: 'space-between',
   },
   content: {

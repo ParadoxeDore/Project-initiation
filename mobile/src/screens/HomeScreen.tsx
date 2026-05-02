@@ -1,9 +1,10 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { HomeScreenProps } from '../navigation/types';
 
 export default function HomeScreen({ navigation }: HomeScreenProps) {
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>UNDERWORD</Text>
         <Text style={styles.subtitle}>Qui est l'imposteur parmi vous ?</Text>
@@ -19,7 +20,7 @@ export default function HomeScreen({ navigation }: HomeScreenProps) {
       </View>
 
       <Text style={styles.footer}>3 à 10 joueurs · Un seul téléphone</Text>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -29,7 +30,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#0d0d1a',
     paddingHorizontal: 24,
     justifyContent: 'space-between',
-    paddingTop: 100,
     paddingBottom: 60,
   },
   header: {

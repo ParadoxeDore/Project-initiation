@@ -6,13 +6,21 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { VoteScreenProps } from '../navigation/types';
 import {
   checkGameOutcome,
   eliminatePlayer,
   GameState,
   Player,
+  Role,
 } from '../utils/gameEngine';
+
+const ROLE_LABELS: Record<Role, string> = {
+  civil: 'était un Civil',
+  imposteur: 'était un Imposteur',
+  'mister-white': 'était Mister White',
+};
 
 type VotePhase = 'voting' | 'eliminated' | 'mister-white-guess';
 
@@ -67,7 +75,7 @@ export default function VoteScreen({ navigation, route }: VoteScreenProps) {
 
   if (phase === 'mister-white-guess') {
     return (
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <View style={styles.content}>
           <Text style={styles.mwTitle}>Mister White éliminé !</Text>
           <Text style={styles.mwHint}>
@@ -90,29 +98,29 @@ export default function VoteScreen({ navigation, route }: VoteScreenProps) {
         >
           <Text style={styles.primaryButtonText}>Valider ma réponse</Text>
         </TouchableOpacity>
-      </View>
+      </SafeAreaView>
     );
   }
 
   if (phase === 'eliminated') {
     return (
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <View style={styles.content}>
           <Text style={styles.eliminatedEmoji}>💀</Text>
           <Text style={styles.eliminatedName}>{eliminated?.name}</Text>
           <Text style={styles.eliminatedRole}>
-            {eliminated?.role === 'civil' ? 'était un Civil' : 'était un Imposteur'}
+            {eliminated ? ROLE_LABELS[eliminated.role] : ''}
           </Text>
         </View>
         <TouchableOpacity style={styles.primaryButton} onPress={continueAfterElimination}>
           <Text style={styles.primaryButtonText}>Tour suivant</Text>
         </TouchableOpacity>
-      </View>
+      </SafeAreaView>
     );
   }
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <Text style={styles.title}>Vote</Text>
       <Text style={styles.subtitle}>Qui soupçonnes-tu d'être l'imposteur ?</Text>
 
@@ -145,14 +153,14 @@ export default function VoteScreen({ navigation, route }: VoteScreenProps) {
       >
         <Text style={styles.primaryButtonText}>Éliminer ce joueur</Text>
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1, backgroundColor: '#0d0d1a',
-    paddingHorizontal: 24, paddingTop: 80, paddingBottom: 60,
+    paddingHorizontal: 24, paddingBottom: 60,
   },
   title: { fontSize: 32, fontWeight: '900', color: '#e8e0ff', marginBottom: 8 },
   subtitle: { fontSize: 15, color: '#8b7fc0', marginBottom: 32 },

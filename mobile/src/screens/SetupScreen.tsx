@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import {
   Alert,
   ScrollView,
@@ -19,39 +19,36 @@ import {
 export default function SetupScreen({ navigation, route }: SetupScreenProps) {
   const initial = route?.params?.initialConfig;
 
-  const [playerNames, setPlayerNames] = useState<string[]>(
-    initial?.playerNames ?? ['', '', '']
+  const [players, setPlayers] = useState<Array<{ id: number; name: string }>>(
+    () => (initial?.playerNames ?? ['', '', '']).map((name, i) => ({ id: i, name }))
   );
+  const nextId = useRef(initial?.playerNames?.length ?? 3);
   const [themes, setThemes] = useState<Theme[]>(initial?.themes ?? ['classique']);
   const [impostorCount, setImpostorCount] = useState(initial?.impostorCount ?? 1);
   const [misterWhiteCount, setMisterWhiteCount] = useState(initial?.misterWhiteCount ?? 0);
   const [balancedMode, setBalancedMode] = useState(false);
 
-  const activePlayers = playerNames.filter((n) => n.trim().length > 0);
+  const activePlayers = players.filter((p) => p.name.trim().length > 0);
   const balancedTotal = computeBalancedImpostorCount(activePlayers.length);
 
-  // In balanced mode, b is clamped to [0, n] and a = n - b
   const effectiveMWCount = balancedMode ? Math.min(misterWhiteCount, balancedTotal) : misterWhiteCount;
   const effectiveImpostorCount = balancedMode ? balancedTotal - effectiveMWCount : impostorCount;
 
-  // Disabled states
   const aMinusDisabled = balancedMode ? effectiveImpostorCount === 0 : impostorCount === 0;
   const aPlusDisabled  = balancedMode ? effectiveMWCount === 0       : impostorCount >= 4;
   const bMinusDisabled = effectiveMWCount === 0;
   const bPlusDisabled  = balancedMode ? effectiveImpostorCount === 0 : misterWhiteCount >= 3;
 
   function addPlayer() {
-    if (playerNames.length < 10) setPlayerNames([...playerNames, '']);
+    if (players.length < 10) setPlayers([...players, { id: nextId.current++, name: '' }]);
   }
 
-  function removePlayer(index: number) {
-    if (playerNames.length > 3) setPlayerNames(playerNames.filter((_, i) => i !== index));
+  function removePlayer(id: number) {
+    if (players.length > 3) setPlayers(players.filter((p) => p.id !== id));
   }
 
-  function updateName(index: number, value: string) {
-    const updated = [...playerNames];
-    updated[index] = value;
-    setPlayerNames(updated);
+  function updateName(id: number, value: string) {
+    setPlayers(players.map((p) => p.id === id ? { ...p, name: value } : p));
   }
 
   function toggleTheme(theme: Theme) {
@@ -105,7 +102,7 @@ export default function SetupScreen({ navigation, route }: SetupScreenProps) {
   }
 
   function startGame() {
-    const names = playerNames.map((n) => n.trim()).filter((n) => n.length > 0);
+    const names = players.map((p) => p.name.trim()).filter((n) => n.length > 0);
 
     if (names.length < 3) {
       Alert.alert('Pas assez de joueurs', 'Il faut au minimum 3 joueurs.');
@@ -148,24 +145,24 @@ export default function SetupScreen({ navigation, route }: SetupScreenProps) {
       {/* Joueurs */}
       <View style={styles.section}>
         <Text style={styles.sectionTitle}>Joueurs</Text>
-        {playerNames.map((name, index) => (
-          <View key={index} style={styles.playerRow}>
+        {players.map((player, index) => (
+          <View key={player.id} style={styles.playerRow}>
             <TextInput
               style={styles.input}
               placeholder={`Joueur ${index + 1}`}
               placeholderTextColor="#4a4060"
-              value={name}
-              onChangeText={(v) => updateName(index, v)}
+              value={player.name}
+              onChangeText={(v) => updateName(player.id, v)}
               maxLength={20}
             />
-            {playerNames.length > 3 && (
-              <TouchableOpacity onPress={() => removePlayer(index)} style={styles.removeButton}>
+            {players.length > 3 && (
+              <TouchableOpacity onPress={() => removePlayer(player.id)} style={styles.removeButton}>
                 <Text style={styles.removeButtonText}>✕</Text>
               </TouchableOpacity>
             )}
           </View>
         ))}
-        {playerNames.length < 10 && (
+        {players.length < 10 && (
           <TouchableOpacity style={styles.addButton} onPress={addPlayer}>
             <Text style={styles.addButtonText}>+ Ajouter un joueur</Text>
           </TouchableOpacity>

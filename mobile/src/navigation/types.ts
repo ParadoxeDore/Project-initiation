@@ -1,5 +1,5 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { GameConfig, GameState } from '../utils/gameEngine';
+import { GameConfig, GameState, OutcomeWinner } from '../utils/gameEngine';
 
 export type RootStackParamList = {
   Home: undefined;
@@ -7,7 +7,7 @@ export type RootStackParamList = {
   PassPhone: { gameState: GameState; playerIndex: number };
   RoleReveal: { gameState: GameState; playerIndex: number };
   Vote: { gameState: GameState };
-  Result: { gameState: GameState; outcome: string };
+  Result: { gameState: GameState; outcome: OutcomeWinner };
 };
 
 export type HomeScreenProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
