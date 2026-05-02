@@ -1,0 +1,18 @@
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { GameConfig, GameState, OutcomeWinner } from '../utils/gameEngine';
+
+export type RootStackParamList = {
+  Home: undefined;
+  Setup: { initialConfig?: GameConfig } | undefined;
+  PassPhone: { gameState: GameState; playerIndex: number };
+  RoleReveal: { gameState: GameState; playerIndex: number };
+  Vote: { gameState: GameState };
+  Result: { gameState: GameState; outcome: OutcomeWinner };
+};
+
+export type HomeScreenProps = NativeStackScreenProps<RootStackParamList, 'Home'>;
+export type SetupScreenProps = NativeStackScreenProps<RootStackParamList, 'Setup'>;
+export type PassPhoneScreenProps = NativeStackScreenProps<RootStackParamList, 'PassPhone'>;
+export type RoleRevealScreenProps = NativeStackScreenProps<RootStackParamList, 'RoleReveal'>;
+export type VoteScreenProps = NativeStackScreenProps<RootStackParamList, 'Vote'>;
+export type ResultScreenProps = NativeStackScreenProps<RootStackParamList, 'Result'>;
